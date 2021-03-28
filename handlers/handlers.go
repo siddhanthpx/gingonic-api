@@ -52,7 +52,7 @@ func AddBook(c *gin.Context) {
 	}
 
 	book := data.Book{Name: bookInput.Name, Author: bookInput.Author}
-	data.AddBook(book)
+	data.AddBook(&book)
 
 	c.JSON(http.StatusOK, book)
 }

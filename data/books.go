@@ -6,7 +6,7 @@ type Book struct {
 	Author string `json:"author"`
 }
 
-var Books = []Book{
+var Books = []*Book{
 	{Id: 1, Name: "Dune", Author: "Frank Herbert"},
 	{Id: 2, Name: "Fire & Blood", Author: "George RR Martin"},
 }
@@ -15,24 +15,19 @@ func FindBook(id int) *Book {
 	id = id - 1
 	for i, b := range Books {
 		if id == i {
-			return &b
+			return b
 		}
 	}
 
 	return nil
 }
 
-func AddBook(book Book) {
+func AddBook(book *Book) {
 	book.Id = getNextID()
 	Books = append(Books, book)
 }
 
 func getNextID() int {
-	var i int
-
-	for i := range Books {
-		i++
-	}
-
-	return i + 1
+	lp := Books[len(Books)-1]
+	return lp.Id + 1
 }
