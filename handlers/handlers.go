@@ -56,3 +56,32 @@ func AddBook(c *gin.Context) {
 
 	c.JSON(http.StatusOK, book)
 }
+
+func UpdateBook(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Error(err)
+	}
+
+	book := data.FindBook(id)
+	if book == nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "Book with ID not found",
+		})
+	}
+
+	var bookInput NewBook
+
+	if err := c.ShouldBindJSON(&bookInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Unable to add new book",
+		})
+		return
+	}
+
+	data.Books[id].Name = bookInput.Name
+	data.Books[id].Author = bookInput.Author
+
+	c.JSON(http.StatusOK, data.Books)
+
+}

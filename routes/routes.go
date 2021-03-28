@@ -18,6 +18,7 @@ func SetupRoutes(g *gin.Engine) {
 	g.GET("/api/books", handlers.GetBooks)
 	g.GET("/api/book/:id", handlers.GetBook)
 	g.POST("/api/book", handlers.AddBook)
+	g.PUT("/api/book/:id", handlers.UpdateBook)
 
 	//Listening on localhost:8080/
 	srv := &http.Server{

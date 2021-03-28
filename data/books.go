@@ -27,6 +27,14 @@ func AddBook(book *Book) {
 	Books = append(Books, book)
 }
 
+func UpdateBook(id int, book *Book) {
+	b := FindBook(id)
+
+	b.Id = id
+	Books[id] = book
+
+}
+
 func getNextID() int {
 	lp := Books[len(Books)-1]
 	return lp.Id + 1
