@@ -24,6 +24,7 @@ func GetBook(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Book with ID not found",
 		})
+		return
 	}
 	c.JSON(http.StatusOK, book)
 
@@ -68,20 +69,29 @@ func UpdateBook(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Book with ID not found",
 		})
+		return
 	}
 
-	var bookInput NewBook
+	var bookInput *NewBook
 
 	if err := c.ShouldBindJSON(&bookInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Unable to add new book",
+			"message": "Unable to update new book",
 		})
 		return
 	}
 
-	data.Books[id].Name = bookInput.Name
-	data.Books[id].Author = bookInput.Author
+	for i, b := range data.Books {
+		if b.Id == id {
+			data.Books[i].Name = bookInput.Name
+			data.Books[i].Author = bookInput.Author
+			c.JSON(http.StatusOK, data.Books)
+			return
+		}
+	}
 
-	c.JSON(http.StatusOK, data.Books)
+	c.JSON(404, gin.H{
+		"message": "Could not edit book",
+	})
 
 }
